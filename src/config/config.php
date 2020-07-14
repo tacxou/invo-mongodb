@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-die('lol');
+
 use Phalcon\Config;
 
 return new Config([

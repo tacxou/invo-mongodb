@@ -13,9 +13,11 @@ declare(strict_types=1);
 namespace InvoMongodb\Libraries\Providers;
 
 use MongoDB\Client;
+use Phalcon\Config;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\ServiceProviderInterface;
 use Phalcon\Exception;
+use Phalcon\Incubator\Mvc\Collection\Manager;
 
 /**
  * Class MongoProvider
@@ -26,17 +28,20 @@ class MongoProvider implements ServiceProviderInterface
 {
     /**
      * @param DiInterface $di
+     * @throws Exception
      */
     public function register(DiInterface $di): void
     {
-        $di->setShared('config', function () use ($di) {
-            $mongoConfig = $di->getShared('config')->get('mongo')->toArray();
+        $mongoConfig = $di
+            ->getShared('config', new Config())
+            ->get('mongo', new Config())
+            ->toArray();
 
-            if (!isset($mongoConfig['dbname'])) {
-                throw new Exception('MongoDB dbname is required');
-            }
-
-            if (isset($mongoConfig['username']) && isset($mongoConfig['password'])) {
+        if (!isset($mongoConfig['dbname'])) {
+            throw new Exception('MongoDB dbname is required');
+        }
+        $di->setShared('mongo', function () use ($mongoConfig) {
+            if (!empty($mongoConfig['username']) && !empty($mongoConfig['password'])) {
                 $dsn = sprintf(
                     'mongodb://%s:%s@%s',
                     $mongoConfig['username'],
@@ -53,5 +58,7 @@ class MongoProvider implements ServiceProviderInterface
             $mongo = new Client($dsn);
             return $mongo->selectDatabase($mongoConfig['dbname']);
         });
+
+        $di->setShared('collectionsManager', new Manager());
     }
 }

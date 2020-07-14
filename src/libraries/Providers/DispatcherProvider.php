@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace InvoMongodb\Libraries\Providers;
 
+use InvoMongodb\Libraries\Plugins\RestApiPlugin;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\ServiceProviderInterface;
 use Phalcon\Events\Manager as EventsManager;
@@ -33,6 +34,8 @@ class DispatcherProvider implements ServiceProviderInterface
     {
         $di->setShared('dispatcher', function () {
             $eventsManager = new EventsManager();
+
+            $eventsManager->attach('dispatch:afterExecuteRoute', new RestApiPlugin());
 
             $dispatcher = new Dispatcher();
             $dispatcher->setDefaultNamespace('InvoMongodb\Controllers');

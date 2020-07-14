@@ -14,10 +14,15 @@ namespace InvoMongodb\Controllers;
 
 use Phalcon\Mvc\Controller;
 
+/**
+ * Class IndexController
+ *
+ * @package InvoMongodb\Controllers
+ */
 class IndexController extends Controller
 {
-    public function indexAction(): void
+    public function indexAction(): array
     {
-        die('lol');
+        return ['status' => 0];
     }
 }

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace InvoMongodb\Libraries\Providers;
 
+use Phalcon\Config;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\ServiceProviderInterface;
 use Phalcon\Url;
@@ -30,7 +31,10 @@ class UrlProvider implements ServiceProviderInterface
      */
     public function register(DiInterface $di): void
     {
-        $baseUri = $di->getShared('config')->application->baseUri;
+        $baseUri = $di
+            ->getShared('config')
+            ->get('application', new Config())
+            ->get('baseUri', '/');
 
         $di->setShared('url', function () use ($baseUri) {
             $url = new Url();

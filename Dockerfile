@@ -1,7 +1,8 @@
 FROM toroia/phalcon-fpm
 
 ENV PHP_DISPLAY_ERRORS=On \
-    PHP_DISPLAY_STARTUP_ERRORS=On
+    PHP_DISPLAY_STARTUP_ERRORS=On \
+    PHP_ERROR_REPORTING=-1
 
 RUN apk update \
   && apk add --no-cache \
