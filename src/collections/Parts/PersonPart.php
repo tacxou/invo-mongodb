@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace InvoMongodb\Collections\Parts;
 
+use MongoDB\BSON\Persistable;
 use Phalcon\Incubator\Mvc\Collection\Document;
 
 /**
@@ -19,11 +20,23 @@ use Phalcon\Incubator\Mvc\Collection\Document;
  *
  * @package InvoMongodb\Collections\Parts
  */
-class PersonPart extends Document
+class PersonPart extends Document implements Persistable
 {
     public $id;
 
     public $name;
 
     public $type;
+
+    public function bsonSerialize()
+    {
+        return $this->toArray();
+    }
+
+    public function bsonUnserialize(array $data)
+    {
+        foreach ($data as $key => $value) {
+            $this->$key = $value;
+        }
+    }
 }

@@ -36,6 +36,9 @@ class Booknote extends Collection
         $this->setSource('booknotes');
     }
 
+    /**
+     * @var PersonPart|null $student
+     */
     public $student;
 
     public $message;

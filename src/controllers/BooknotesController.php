@@ -26,6 +26,7 @@ class BooknotesController extends Controller
     public function indexAction(): array
     {
         $booknotes = Booknote::find();
+        
         return [
             'status' => 0,
             'data' => $booknotes
